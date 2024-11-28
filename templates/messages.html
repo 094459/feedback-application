@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Messages</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .message {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .qr-code img {
+            max-width: 200px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .feedback-link {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Feedback Messages</h1>
+        <a href="{{ url_for('feedback') }}" class="feedback-link">Submit Feedback</a>
+    </div>
+    
+    <div class="qr-code">
+        <h3>Scan to submit feedback:</h3>
+        <img src="{{ url_for('static', filename='feedback_qr.png') }}" alt="Feedback QR Code">
+    </div>
+
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        function updateMessages() {
+            fetch('/messages')
+                .then(response => response.json())
+                .then(messages => {
+                    const messagesDiv = document.querySelector('.messages');
+                    messagesDiv.innerHTML = messages.map(message => 
+                        `<div class="message">${message}</div>`
+                    ).join('');
+                });
+        }
+        
+        // Update messages initially and every 2 seconds
+        updateMessages();
+        setInterval(updateMessages, 2000);
+    </script>
+</body>
+</html>
