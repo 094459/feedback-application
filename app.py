@@ -51,5 +51,7 @@ def feedback():
 
 if __name__ == '__main__':
     Path('static').mkdir(exist_ok=True)
-    generate_qr_code('http://localhost:5000/feedback')
-    app.run(debug=True)
+    # Update QR code to use 0.0.0.0 instead of localhost
+    generate_qr_code('http://127.0.0.1:5001/feedback')
+    # Modified to listen on all interfaces
+    app.run(host='0.0.0.0', port=5000, debug=True)
